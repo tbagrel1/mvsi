@@ -1,19 +1,15 @@
-#include <stdio.h>
-int main ()
-{
-    int n, c, i = 1, a = 1;
-    printf("Enter the number of rows of Floyd’s triangle to print \n");
-    scanf("%d", &n);
+void floyd_triangle(int n) {
+    int c, i = 1, a = 1;
+    int display[n][n];
     while( i <= n)
     {
         c = 1;
         while(c <= i)
         {
-            printf("%d ", a);
+            display[i-1, c-1] = a;
             a++;
             c++;
         }
-        printf("\n") ;
         i++;
     }
     return 0 ;
