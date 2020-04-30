@@ -1,0 +1,760 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage{tbagrelstandard}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{dsfont}
+\usepackage{listings}
+
+\title{Projet MVSI}
+\author{Groupe 1 : T. \sc{Adam}, A. \sc{Cesari}, T. \sc{Bagrel}}
+\date{Avril 2020}
+
+\newcommand{\pto}{\mathrel{\ooalign{\hfil$\mapstochar$\hfil\cr$\to$\cr}}}
+\DeclareMathOperator{\card}{card}
+\DeclareMathOperator{\eenu}{Enum}
+\DeclareMathOperator{\ddom}{Dom}
+\newcommand{\dom}[1]{\ddom\left(#1\right)}
+\newcommand{\enu}[2]{\eenu_{\substack{#1}}\left(#2\right)}
+\newcommand{\ind}[1]{\chi_{#1}}
+\newtheoremstyle{mystyle}% hnamei
+{5pt}% hSpace abovei
+{5pt}% hSpace belowi
+{\rmfamily}% hBody fonti
+{}% hIndent amounti1
+{\bfseries\large}% hTheorem head fonti
+{.}% hPunctuation after theorem headi
+{.5em}% hSpace after theorem headi2
+{}%
+\theoremstyle{mystyle}
+\newtheorem{theorem}{Théorème}[section]
+\newtheorem{lemma}[theorem]{Lemme}
+\newcommand{\annot}[1]{{\color{black} #1}}
+\newcommand{\TODO}{\textcolor{red}{{\large TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO TODO}}}
+
+\lstdefinelanguage{prooflang}{
+    morekeywords={
+        constants,
+        variables,
+        if,
+        else,
+        while,
+        and,
+        or,
+        {:=},
+    },
+    morecomment = [l][\color{green!80!black}]{//}
+}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents{}
+
+\clearpage\section{Triangle de Floyd (Timothée)}
+
+\subsection{Code original}
+
+\begin{lstlisting}[language=c,  basicstyle=\ttfamily\normalsize\color{black!90},
+  stringstyle=\color{black!70},
+  commentstyle=\itshape\color{black!60},
+  identifierstyle=\color{black!90},
+  keywordstyle=\color{black!100}\bfseries,
+  numberstyle=\ttfamily\small\color{black!50},
+  numbers=left,
+  numbersep=10pt,
+  backgroundcolor=\color{black!1},
+  rulecolor=\color{black!30},
+  title=\large\ttfamily\lstname,
+  breakatwhitespace=true,
+  breaklines=false,
+  captionpos=b,
+  frame=single,
+  keepspaces=true,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  tabsize=4,
+  numberblanklines=true,
+  frameround=tttt,
+  belowskip=-1.2\baselineskip,]
+#include <stdio.h>
+
+void floyd_triangle(unsigned int n) {
+    int i, c, a;
+    a = 1;
+    for (i = 1; i <= n; i++) {
+        for (c = 1; c <= i; c++) {
+            printf("%d ", a);
+            a++;
+        }
+        printf("\n");
+    }
+}
+
+\end{lstlisting}
+
+\subsection{Modélisation de l'affichage}
+
+Comme cet algorithme est un algorithme d'affichage, il est nécessaire de modéliser cet affichage par un composant mathématique que l'on peut utiliser dans la preuve (et surtout dans la post-condition). Ici, nous utiliserons une fonction partielle $display \in (\N \times \N) \pto \Z$ pour modéliser la matrice d'affichage. Chaque ligne de la matrice $display$ correspond à une ligne à l'écran. On considère que les nombres de notre triangle de Floyd seront placés dans des cases de la matrice d'affichage, où chaque case peut recevoir un nombre complet (et non pas seulement un caractère, ce qui obligerait à gérer la longueur en caractères de chaque nombre ainsi que le caractère espace entre chaque nombre). Dès lors, on peut modéliser les appels à la fonction \texttt{printf} par des manipulations sur la matrice $display$ :
+\begin{itemize}
+    \item on considère deux pseudo-variables $u$ et $v$ représentant la position actuelle du curseur (qui correspond à la prochaine case dans laquelle sera écrit un nombre). Au départ, la matrice $display$ est vide ($display = \emptyset$), et le curseur est sur la première case en haut à gauche, donc $(u, v) = (0, 0)$ ;
+    \item l'appel \texttt{printf("\%d ", a);} est alors modélisé par \texttt{display(u, v) := a ; v := v + 1} : on place la valeur \texttt{a} à la position actuelle du curseur, et on déplace le curseur vers la droite ;
+    \item l'appel \texttt{printf("\textbackslash{}n");} est alors modélisé par \texttt{u := u + 1 ; v := 0} : on place le curseur sur la ligne suivante, et on le replace en début de ligne.
+\end{itemize}
+
+\subsection{Réécriture et annotations}
+
+Lors de la réécriture du code C en algorithme prouvable, il est nécessaire de transformer les \tt{for} en briques de bases que l'on sait prouver : les boucles \tt{while}.
+
+Ici, il n'y a pas de pré-condition (à part l'appartenance $n \in \N$). La post-condition, en revanche, correspond à l'assertion "les bons nombres sont à la bonne place dans l'affichage", et s'énonce mathématiquement avec : $\forall j \in 0..n-1, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \dfrac{j(j+1)}{2} + k + 1$.
+
+\paragraph{N.B.} Les types des variables sont considérés comme des axiomes tout au long de la preuve et dans le système d'annotation (pour ne pas surcharger encore l'ensemble). Sous Rodin et TLA+, un invariant de vérification des types sera ajouté.
+
+\clearpage\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+
+constants n
+variables u, v, i, a, c, display
+
+$\annot{l_0 : \text{\rmfamily\sc{vrai}}}$
+u := 0  // printing starts in the upper-left corner
+v := 0
+$\annot{l_1 : u = 0 \land v = 0}$
+i := 1
+$\annot{l_2 : i = 1 \land u = i - 1 \land v = 0}$
+a := 1
+$\annot{l_3 : i = 1 \land a = 1 \land u = i - 1 \land v = 0}$
+while( i <= n) {
+    $\annot{l_4 : 1 \leq i \leq n \land a = \frac{i(i - 1)}{2} + 1 \land u = i - 1 \land v = 0 }$
+    $\annot{\phantom{l_{4} : }\land \forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+    c := 1
+    $\annot{l_5 : 1 \leq i \leq n \land c = 1 \land a = \frac{i(i - 1)}{2} + c \land u = i - 1 \land v = c - 1}$
+    $\annot{\phantom{l_{5} : }\land (\forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+    while (c <= i) {
+        $\annot{l_6 : 1 \leq i \leq n \land 1 \leq c \leq i \land a = \frac{i(i - 1)}{2} + c \land u = i - 1 \land v = c - 1}$
+        $\annot{\phantom{l_{6} : }\land \forall j \in 0..i-2, (\forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+        $\annot{\phantom{l_{6} : } \land (\forall k \in 0..c-2, (i-1, k) \in \dom{display} \land display(j, k) = \frac{(i-1)i}{2} + k + 1)}$
+        display(u, v) := a  // print a
+        v := v + 1
+        $\annot{l_7 : 1 \leq i \leq n \land 1 \leq c \leq i \land a = \frac{i(i - 1)}{2} + c \land u = i - 1 \land v = c}$
+        $\annot{\phantom{l_{7} : } \land (\forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+        $\annot{\phantom{l_{7} : } \land (\forall k \in 0..c-1, (i-1, k) \in \dom{display}\land display(j, k) = \frac{(i-1)i}{2} + k + 1)}$
+        a := a + 1
+        $\annot{l_8 : 1 \leq i \leq n \land 1 \leq c \leq i \land a = \frac{i(i - 1)}{2} + c + 1 \land u = i - 1 \land v = c}$
+        $\annot{\phantom{l_{8} : }\land (\forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display}\land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+        $\annot{\phantom{l_{8} : } \land (\forall k \in 0..c-1, (i-1, k) \in \dom{display}\land display(j, k) = \frac{(i-1)i}{2} + k + 1)}$
+        c := c + 1
+        $\annot{l_9 : 1 \leq i \leq n \land 1 \leq c \leq i + 1 \land a = \frac{i(i - 1)}{2} + c \land u = i - 1 \land v = c - 1}$
+        $\annot{\phantom{l_{9} : } \land (\forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1)}$
+        $\annot{\phantom{l_{9} : }\land (\forall k \in 0..c-2, (i-1, k) \in \dom{display} \land display(i-1, k) = \frac{(i-1)i}{2} + k  + 1)}$
+    }
+    $\annot{l_{10} : 1 \leq i \leq n \land c = i + 1 \land  a = \frac{i(i + 1)}{2} + 1 \land u = i - 1 \land v = c - 1 }$
+    $\annot{\phantom{l_{10} : }\land (\forall j \in 0..i-1, \forall k \in 0..j, (j, k) \in \dom{display}  \land display(j, k) = \frac{j(j+1)}{2} + k + 1) }$
+    u := u + 1  // print \n
+    v := 0
+    $\annot{l_{11} : 1 \leq i \leq n \land c = i + 1 \land  a = \frac{i(i + 1)}{2} + 1 \land u = i \land v = 0}$
+    $\annot{\phantom{l_{11} : }\land (\forall j \in 0..i-1, \forall k \in 0..j, (j, k) \in \dom{display}  \land display(j, k) = \frac{j(j+1)}{2} + k + 1) }$
+    i := i + 1
+    $\annot{l_{12} : 1 \leq i \leq n + 1 \land c = i \land a = \frac{(i-1)i}{2} + 1 \land u = i - 1 \land v = 0 }$
+    $\annot{\phantom{l_{12} : } \land (\forall j \in 0..i-2, \forall k \in 0..j, (j, k) \in \dom{display}\land display(j,k) = \frac{j(j+1)}{2} + k + 1) }$
+}
+$\annot{l_{13} : \forall j \in 0..n-1, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \frac{j(j+1)}{2} + k + 1}$
+\end{lstlisting}
+
+\subsection{Absence d'erreurs à l'exécution}
+
+Pour vérifier l'absence d'erreur à l'exécution, Frama-C va tenter de prouver l'absence d'overflow/underflow, ainsi que la validité des cases mémoires lors des déréférences de pointeurs. Cependant, pour que Frama-C y arrive, il doit prouver un invariant (ou au moins une forme allégée) semblable à celui présenté dans ce document. C'est une tâche ardue, qui nécessite donc qu'on l'aide avec des annotations.
+
+Cependant, en analysant le problème de manière plus détaillée, on peut se passer des capacités de Frama-C :
+\begin{itemize}
+    \item la validité des cases mémoires (les accès aux cellules de $display$) a été prouvée avec Rodin, avec toutes les annotations (validées) évoquant $\dom{display}$ ;
+    \item les annotations prouvées avec Rodin montrent que $i$, $c$ sont toujours dans l'intervalle $0..n - 1$, de plus Rodin valide la post-condition : $\forall j \in 0..n-1, \forall k \in 0..j, (j, k) \in \dom{display} \land display(j, k) = \dfrac{j(j+1)}{2} + k + 1$, ainsi on en déduit  que $a$ reste toujours dans la plage $0..\dfrac{n(n+1)}{2}$
+    \item enfin, $u$ et $v$ sont des pseudo-variables qui ne sont utilisées que pour modéliser l'affichage, et qui n'apparaissent pas dans le code réel.
+\end{itemize}
+Ainsi, il semble que l'absence de RTE soit déjà validée grâce à Rodin, à condition que $\dfrac{n(n+1)}{2}$ ne dépasse pas la valeur maximale pour un entier signé, à savoir $2147483647$ en 32 bit ou $9223372036854775807$ en 64 bit. C'est à dire que $n$ ne dépasse pas $\left\lfloor\frac{-1+\sqrt{1 + 8 \cdot INT\_MAX}}{2}\right\rfloor$ soit $65535$ en 32 bit et $4294967295$ en 64 bit.
+
+\clearpage\section{Modélisation des tableaux pour une preuve de tri}
+
+Deux des trois programmes du projet à prouver sont des algorithmes de tri sur des tableaux. Il convient donc dans un premier temps d'introduire un formalisme pouvant être utilisé pour modéliser les tableaux à la fois dans les preuves de programmes manuelles mais également mécanisées avec TLA+ et Rodin.
+
+\subsection{Définition de la pré-condition et post-condition pour un algorithme de tri}
+
+Si les algorithmes de tri étudiés travaillent bien souvent en place (modification du tableau passé en paramètres pour le trier), il est nécessaire dans la preuve de considérer que le tableau passé en entrée n'est pas modifié, afin de pouvoir trouver une formulation de "le tableau est bien trié" au niveau de la post-condition.
+
+Du point de vue code, un algorithme de tri générique prendrait en entrée un tableau (pointeur vers un entier) \tt{tab} ainsi qu'un entier non signé \tt{n}, et si ce tableau est de taille au moins \tt{n}, trierait en place les valeurs de ce tableau par ordre croissant.
+
+Côté preuve, l'algorithme disposerait en entrée des constantes :
+\begin{itemize}
+    \item $tab \in \N \pto \Z$
+    \item $n \in \N$
+\end{itemize}
+et serait chargé de construire $tab_{out} \in \N \pto \Z$ qui représenterait le tableau trié en sortie.
+
+\paragraph{Pré-condition}\mbox{}
+
+La pré-condition correspond alors à la formulation mathématique de "le tableau $tab$ est de taille au moins $n$", et est facile à énoncer grâce à l'utilisation de fonctions partielles :
+\[
+    \text{\sc{pre}}: 0..n - 1 \subseteq \dom{tab}
+\]
+
+\paragraph{Post-condition}\mbox{}
+
+Intuitivement, la post-condition comporte deux parties :
+\begin{itemize}
+    \item le tableau en sortie est de taille au moins $n$
+    \item le tableau en sortie contient les mêmes éléments que celui en entrée, mais triés par ordre croissant.
+\end{itemize}
+
+\medskip
+
+\noindent{}La première partie s'énonce facilement (toujours avec le formalisme des fonctions partielles) :
+\[
+    0..n - 1 \subseteq \dom{tab_{out}}
+\]
+Pour formaliser la deuxième partie, nous allons introduire l'opérateur $\text{Enum}_{\substack{n}}$.\\
+Soit $n \in \N$ et $tab \in \N \pto \Z$ tel que $0..n - 1 \subseteq \dom{tab}$
+\[
+    \enu{n}{tab} : \left\{\begin{array}{rcl}
+        \Z &\lsto& \N \\
+        m &\to& \card\left\{ i \in 0..n - 1 | tab(i) = m \right\} 
+    \end{array}\right.
+\]
+
+La conservation des éléments entre le tableau initial $tab$ et le tableau final $tab_{out}$ sera donc modélisée par $0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}$.
+
+Intuitivement, $\enu{n}{tab_{out}} = \enu{n}{tab}$ vérifie que chaque valeur apparaissant dans le tableau $tab$ entre les indices $0$ et $n - 1$ inclus est présente en même nombre dans $tab_{out}$. Il est enfin facile de prouver que $\enu{n}{tab_{out}} = \enu{n}{tab}$ si et seulement si $tab$ et $tab_{out}$ restreints à $0..n - 1$ sont en permutation.
+
+\paragraph{Regroupement}\mbox{}
+
+Finalement, un algorithme de tri (en place) peut être défini côté code par une fonction de signature
+\[
+    \text{\tt{void sort(int *tab, unsigned int n)}}
+\]
+et côté preuve par
+\[
+    \begin{array}{ll}
+         \sc{constants}& tab \in \N \pto \Z \\
+         & n \in \N \\
+         \sc{variables}& tab_{out} \in \N \pto \Z \\
+         \sc{pre} & 0..n - 1 \subseteq \dom{tab} \\
+         \sc{post} & 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}\\
+         &\land \forall k \in 0..n - 2, tab_{out}(k) \leq tab_{out}(k + 1)
+    \end{array}
+\]
+Enfin, il sera nécessaire de réaliser dans l'adaptation en algorithme du code C une copie du tableau initial $tab$ dans le tableau $tab_{out}$.
+
+\subsection{Modélisation de l'affectation d'une cellule du tableau}
+Soit $tab \in \N \pto \Z$ avec $D \subseteq \dom{tab}$. Soit $k \in \N$ et $v \in \Z$.\\
+L'opération \tt{tab(k) := v} est modélisée par l'assertion logique
+\[
+    D \cup \{k\} \subseteq \dom{tab'} \land tab' : \left\{\begin{array}{rcl}
+    \N &\pto& \Z \\
+    i &\lsto& \left\{\begin{array}{l}
+         v\text{ si }i = k\\
+         tab(i)\text{ sinon} 
+    \end{array}\right. 
+\end{array}\right.
+\]
+
+\subsection{Théorèmes sur la notation Enum}
+
+\begin{lemma}\label{lm:enu}\mbox{}\\
+Soit $n \in \N$. Soit $tab \in \N \pto \Z$ tel que $0..n - 1 \subseteq \dom{tab}$. \\
+Soit $k \in 0..n - 1$ et $v \in \Z$.\\
+Soit $\displaystyle tab' : \left\{\begin{array}{rcl}
+    \N &\pto& \Z \\
+    i &\lsto& \left\{\begin{array}{l}
+         v\text{ si }i = k\\
+         tab(i)\text{ sinon} 
+    \end{array}\right. 
+\end{array}\right.$
+\[
+    \enu{n}{tab'} = \enu{n}{tab} + \ind{\{v\}} - \ind{\{tab(k)\}}
+\]
+\end{lemma}
+\begin{proof}[Preuve du lemme \ref{lm:enu}]\mbox{}\\
+Soit $m \in \Z$.\\
+\[
+    \enu{n}{tab'}(m) = \card\{i \in 0..n - 1 | tab'(i) = m\}
+\]
+or
+\[
+\begin{array}{rcl}
+    \forall i \in 0..n - 1,\quad tab'(i) = m &\iff& (i \neq k \land tab'(i) = m) \lor (i = k \land tab'(i) = m) \\
+    &\iff& (i \neq k \land tab(i) = m) \lor (i = k \land v = m)
+\end{array}
+\]
+donc
+\[
+    \{i \in 0..n - 1 | tab'(i) = m\} = \{i \in 0..n - 1 | i \neq k \land tab(i) = m\} \bigsqcup \{i \in 0..n - 1 | i = k \land v = m\}
+\]
+de plus,
+\[
+    \{i \in 0..n - 1 | i \neq k \land tab(i) = m\} \bigsqcup \{i \in 0..n - 1 | i = k \land tab(i) = m\} = \{i \in 0..n - 1 | tab(i) = m\}
+\]
+donc
+\[
+    \card\{i \in 0..n - 1 | i \neq k \land tab(i) = m\} = \card\{i \in 0..n - 1 | tab(i) = m\} - \card\{i \in 0..n - 1 | i = k \land tab(i) = m\}
+\]
+en regroupant
+\[
+    \begin{array}{rccl}
+        \enu{n}{tab'}(m) &=&& \card\{i \in 0..n - 1 | tab'(i) = m\}\\
+         &=&& \card\{i \in 0..n - 1 | i \neq k \land tab(i) = m\} \\
+         &&+& \card\{i \in 0..n - 1 | i = k \land v = m\} \\ 
+         &=&& \card\{i \in 0..n - 1 | tab(i) = m\} \\
+         &&-& \card\{i \in 0..n - 1 | i = k \land tab(i) = m\} \\
+         &&+& \card\{i \in 0..n - 1 | i = k \land v = m\} \\
+         &=&& \enu{n}{tab}(m) - \ind{\{tab(k)\}}(m) + \ind{\{v\}}(m)
+    \end{array}
+\]
+\end{proof}
+
+Pour les théorèmes suivants, nous considérons $n \in \N$ et $tab, tab_{out} \in \N \pto \Z$ tels que\\$0..n - 1 \subseteq \dom{tab}$ et $0..n - 1 \subseteq \dom{tab_{out}}$.
+
+\begin{theorem}[Destruction]\mbox{}\\
+Soit $j, k \in 0..n - 1$ et $tmp \in \Z$.\\
+Les annotations suivantes sont justes :
+\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+$\annot{l_0 : \enu{n}{tab_{out}} = \enu{n}{tab} \land tmp = tab_{out}(k) \land j \neq k}$
+tab_out(k) := tab_out(j)
+$\annot{l_1 : \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j)\}} - \ind{\{tmp\}}}$
+\end{lstlisting}
+\end{theorem}
+
+
+
+\begin{theorem}[\'Echange]\mbox{}\\
+Soit $j, l \in 0..n - 1$ et $tmp \in \Z$.\\
+Les annotations suivantes sont justes :
+\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+$\annot{l_0 : \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j)\}} - \ind{\{tmp\}} \land l \neq j}$
+tab_out(j) := tab_out(l)
+$\annot{l_1 : \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(l)\}} - \ind{\{tmp\}}}$
+\end{lstlisting}
+\end{theorem}
+
+\begin{theorem}[Reconstruction]\mbox{}\\
+Soit $l \in 0..n - 1$ et $tmp \in \Z$.\\
+Les annotations suivantes sont justes :
+\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+$\annot{l_0 : \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(l)\}} - \ind{\{tmp\}}}$
+tab_out(l) := tmp
+$\annot{l_1 : \enu{n}{tab_{out}} = \enu{n}{tab}}$
+\end{lstlisting}
+\end{theorem}
+
+Les trois théorèmes se prouvent avec la technique de preuve classique sur les annotations en utilisant le lemme sur $tab_{out}$.
+
+\clearpage\section{Bubble sort (Alexandre)}
+
+\subsection{Code original}
+
+\begin{lstlisting}[language=c,  basicstyle=\ttfamily\normalsize\color{black!90},
+  stringstyle=\color{black!70},
+  commentstyle=\itshape\color{black!60},
+  identifierstyle=\color{black!90},
+  keywordstyle=\color{black!100}\bfseries,
+  numberstyle=\ttfamily\small\color{black!50},
+  numbers=left,
+  numbersep=10pt,
+  backgroundcolor=\color{black!1},
+  rulecolor=\color{black!30},
+  title=\large\ttfamily\lstname,
+  breakatwhitespace=true,
+  breaklines=false,
+  captionpos=b,
+  frame=single,
+  keepspaces=true,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  tabsize=4,
+  numberblanklines=true,
+  frameround=tttt,
+  belowskip=-1.2\baselineskip,]
+void bubble_sort(int *tab, unsigned int n) {
+    int c, d, swap;
+    c = 0;
+    while (c < (n - 1)) {
+        d = 0;
+        while (d < (n - c - 1)) {
+            if (tab[d] > tab[d + 1]) {
+                swap = tab[d];
+                tab[d] = tab[d + 1];
+                tab[d + 1] = swap;
+            }
+            d++;
+        }
+        c++;
+    }
+}
+\end{lstlisting}
+
+\subsection{Réécriture et annotations}
+
+Lors de la réécriture du code C en algorithme prouvable, il est nécessaire de transformer/décomposer les \tt{for} en brique de base que l'on sait prouver : la boucle \tt{while}.
+
+De plus, il faut introduire une boucle pour copier le tableau initial, afin de toujours conserver l'original pour pouvoir établir la post-condition.
+
+\paragraph{N.B.} les assertions logiques de la pré-condition sont considérées comme vraies et pouvant être utilisées pour prouver le système d'annotation. Pour être plus rigoureux, il aurait fallu propager les parties utiles de la pré-condition tout le long du système d'annotation, ce qui aurait encore alourdi la notation. De plus, les types des variables sont considérés comme des axiomes tout au long de la preuve et dans le système d'annotation (pour ne pas surcharger encore l'ensemble). Sous Rodin et TLA+, un invariant de vérification des types sera ajouté.
+
+\newcommand{\trisup}{\forall n-c \leq k \leq n-1, \forall 0 \leq l < k, tab_{out}(l) \leq tab_{out}(k)}
+\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+    
+constants tab, n
+variables tab_out, c, d, swap
+
+$\annot{l_0 : \text{\rmfamily\sc{vrai}}}$
+c := 0
+$\annot{l_1 : c = 0}$
+while (c < n) {
+    $\annot{l_2 : 0 \leq c < n \land 0..c - 1 \subseteq \dom{tab_{out}} \land \enu{c}{tab_{out}} = \enu{c}{tab}}$
+    tab_out(c) := tab(c)
+    $\annot{l_3 : 0 \leq c < n \land 0..c \subseteq \dom{tab_{out}} \land \enu{c + 1}{tab_{out}} = \enu{c + 1}{tab}}$
+    c := c + 1
+    $\annot{l_4 : 0 \leq c \leq n \land 0..c - 1 \subseteq \dom{tab_{out}} \land \enu{c}{tab_{out}} = \enu{c}{tab}}$
+}
+$\annot{l_5 : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+c := 0
+$\annot{l_6 : 0..n - 1 \subseteq \dom{tab_{out}} \land c = 0 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+while (c < (n - 1)) {
+    $\annot{l_7 : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{7} : } \land \trisup}$
+    d := 0
+    $\annot{l_8 : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{8} : } \land \trisup}$
+    $\annot{\phantom{l_{8} : } \land d = 0}$
+    while (d < (n - c - 1)) {
+        $\annot{l_9 : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{9} : } \land \trisup}$
+        $\annot{\phantom{l_{9} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d, tab_{out}(k) \leq tab_{out}(d)}$
+        if (tab_out(d) > tab_out(d + 1)) {
+            $\annot{l_{10} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{10} : } \land \trisup}$
+            $\annot{\phantom{l_{10} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d, tab_{out}(k) \leq tab_{out}(d)}$
+            $\annot{\phantom{l_{10} : } \land tab_{out}(d) > tab_{out}(d + 1)}$
+            swap := tab_out(d)
+            $\annot{l_{11} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{11} : } \land \forall n-c \leq k \leq n-1, swap \leq tab_{out}(k) \land (\forall 0 \leq l < k, tab_{out}(l) \leq tab_{out}(k))}$
+            $\annot{\phantom{l_{11} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d, tab_{out}(k) \leq tab_{out}(d)}$
+            $\annot{\phantom{l_{11} : } \land tab_{out}(d) > tab_{out}(d + 1) \land swap = tab_{out}(d) \land swap > tab_{out}(d + 1)}$
+            tab_out(d) := tab_out(d + 1)
+            $\annot{l_{12} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1}$
+            $\annot{\phantom{l_{12} : } \land \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(d + 1)\}} - \ind{\{swap\}}}$
+            $\annot{\phantom{l_{12} : } \land \forall n-c \leq k \leq n-1, swap \leq tab_{out}(k) \land (\forall 0 \leq l < k, tab_{out}(l) \leq tab_{out}(k))}$
+            $\annot{\phantom{l_{12} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d + 1, tab_{out}(k) \leq swap}$
+            tab_out(d + 1) := swap
+            $\annot{l_{13} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{13} : } \land \trisup}$
+            $\annot{\phantom{l_{13} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d + 1, tab_{out}(k) \leq tab_{out}(d + 1)}$
+        } else {
+            $\annot{l_{14} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{14} : } \land \trisup}$
+            $\annot{\phantom{l_{14} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d + 1, tab_{out}(k) \leq tab_{out}(d + 1)}$
+        }
+        $\annot{l_{15} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{15} : } \land \trisup}$
+        $\annot{\phantom{l_{15} : } \land 0 \leq d < n - c - 1 \land \forall 0 \leq k < d + 1, tab_{out}(k) \leq tab_{out}(d + 1)}$
+        d := d + 1
+        $\annot{l_{16} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{16} : } \land \trisup}$
+        $\annot{\phantom{l_{16} : } \land 0 \leq d \leq n - c - 1 \land \forall 0 \leq k < d, tab_{out}(k) \leq tab_{out}(d)}$
+    }
+    $\annot{l_{17} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c < n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{17} : } \land \forall n - c - 1 \leq k \leq n - 1, \forall 0 \leq l < k, tab_{out}(l) \leq tab_{out}(k)}$
+    c := c + 1
+    $\annot{l_{18} : 0..n - 1 \subseteq \dom{tab_{out}} \land 0 \leq c \leq n - 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{18} : } \land \forall n - c \leq k \leq n - 1, \forall 0 \leq l < k, tab_{out}(l) \leq tab_{out}(k)}$
+}
+$\annot{l_{19} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+$\annot{\phantom{l_{19} : }\land \forall 0 \leq k \leq n - 2, tab_{out}(k) \leq tab_{out}(k + 1)}$
+\end{lstlisting}
+
+\clearpage\subsection{Idée de la preuve}
+
+Si l'indice de l'élément en cours de déplacement est $d$, et l'indice de début la zone triée (en fin de tableau) est $t$, alors l'invariant est $\forall k \in 0..d - 1, tab_{out}(k) \leq tab_{out}(d)$ (\og{}l'élément courant est plus grand que tous ceux à sa gauche\fg{}) et $\forall k \in t..n - 1, \forall l \in 0..k - 1, tab_{out}(l) \leq tab_{out}(k)$ (\og{}chaque élément de la zone triée est plus grand que tous les éléments à sa gauche\fg{}). Quand $d$ arrive en bout de parcours (et vaut $t - 1$), l'élément courant $tab_{out}(d)$ est plus grand que tous les éléments à sa gauche et plus petit que tous les éléments à sa droite. La zone des éléments triés s'en retrouve donc agrandie.
+
+\subsection{Absence d'erreurs à l'exécution}
+
+L'utilisation de Frama-C sur l'algorithme de bubble sort est délicate. En effet, pour vérifier l'absence d'erreurs à l'exécution, Frama-C va tenter de prouver l'absence d'overflow/underflow, ainsi que la validité des cases mémoires lors des déréférences de pointeurs.
+
+Cependant, pour prouver l'absence d'erreurs, compte tenu de la complexité de l'algorithme de bubble sort, Frama-C a besoin d'un système d'annotations semblable à celui décrit dans ce document, à ceci près que le code C travaille en place, et que Frama-C le remodifie ensuite dans un format que l'outil digère plus facilement. Il faudrait donc adapter le système d'annotation qui a été utilisé sur papier, Rodin et TLA+ -- un travail long et fastidieux -- pour gagner seulement la preuve d'absence de RTE\ldots{}
+
+Mais en analysant le problème de manière plus détaillée :
+\begin{itemize}
+    \item la validité des cases mémoires (les accès aux cellules de $tab$ et $tab_{out}$) a été prouvée avec Rodin, avec toutes les annotations (validées) de la forme $0..n - 1 \subseteq \dom{tab}$ ;
+    \item les annotations prouvées avec Rodin montrent que $c$ et $d$ sont toujours dans l'intervalle $0..n - 1$. $swap$ quant à lui n'est utilisé que pour sauver une valeur temporaire du tableau (qui est du type \tt{int} aussi, donc aucune chance de RTE).
+\end{itemize}
+Ainsi, il semble que l'absence de RTE soit déjà validée grâce à Rodin, à condition que $n$ ne dépasse pas la valeur maximale pour un entier signé, à savoir $2147483647$ en 32 bit ou $9223372036854775807$ en 64 bit.
+
+Le code C du programme, avec le commentaire spécial au format ACSL (Frama-C) spécifiant la pré-condition et post-condition de l'algorithme est tout de même fourni dans les livrables du projet.
+
+\clearpage\section{Shell sort (Thomas)}
+
+\subsection{Code original}
+
+\begin{lstlisting}[language=c,  basicstyle=\ttfamily\normalsize\color{black!90},
+  stringstyle=\color{black!70},
+  commentstyle=\itshape\color{black!60},
+  identifierstyle=\color{black!90},
+  keywordstyle=\color{black!100}\bfseries,
+  numberstyle=\ttfamily\small\color{black!50},
+  numbers=left,
+  numbersep=10pt,
+  backgroundcolor=\color{black!1},
+  rulecolor=\color{black!30},
+  title=\large\ttfamily\lstname,
+  breakatwhitespace=true,
+  breaklines=false,
+  captionpos=b,
+  frame=single,
+  keepspaces=true,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  stepnumber=1,
+  tabsize=4,
+  numberblanklines=true,
+  frameround=tttt,
+  belowskip=-1.2\baselineskip,]
+void shell_sort(int *tab, unsigned int n) {
+    int i, j, inc, tmp;
+    // --------------------
+    inc = 3;
+    while (inc > 0) {
+        for (i = 0; i < n; i++) {
+            j = i;
+            tmp = tab[i];
+            while ((j >= inc) && (tab[j - inc] > tmp)) {
+                tab[j] = tab[j - inc];
+                j = j - inc;
+            }
+            tab[j] = tmp;
+        }
+        if (inc / 2 != 0) {
+            inc = inc / 2;
+        } else if (inc == 1) {
+            inc = 0;
+        } else {
+            inc = 1;
+        }
+    }
+}
+\end{lstlisting}
+
+\subsection{Réécriture et annotations}
+
+Lors de la réécriture du code C en algorithme prouvable, il est nécessaire de transformer/décomposer les \tt{for} et les \tt{else if} en briques de bases que l'on sait prouver : la boucle \tt{while} et l'alternative \tt{if}/\tt{else}.
+
+De plus, il faut introduire une boucle pour copier le tableau initial, afin de toujours conserver l'original pour pouvoir établir la post-condition.
+
+\paragraph{N.B.} les assertions logiques de la pré-condition sont considérées comme vraies et pouvant être utilisées pour prouver le système d'annotation. Pour être plus rigoureux, il aurait fallu propager les parties utiles de la pré-condition tout le long du système d'annotations, ce qui aurait encore alourdi la notation. De plus, les types des variables sont considérés comme des axiomes tout au long de la preuve et dans le système d'annotation (pour ne pas surcharger encore l'ensemble). Sous Rodin et TLA+, un invariant de vérification des types sera ajouté.
+
+\begin{lstlisting}[language=prooflang, mathescape,
+    basicstyle=\ttfamily\large\color{blue!90!black},
+    keywordstyle=\bfseries,
+    tabsize=4]
+constants tab, n
+variables tab_out, i, j, inc, tmp
+
+$\annot{l_0 : \text{\rmfamily\sc{vrai}}}$
+i := 0
+$\annot{l_1 : i = 0}$
+while (i < n) {
+    $\annot{l_2 : 0 \leq i \land i < n \land 0..i - 1 \subseteq \dom{tab_{out}} \land \enu{i}{tab_{out}} = \enu{i}{tab}}$
+    tab_out(i) := tab(i)
+    $\annot{l_3 : 0 \leq i \land i < n \land 0..i \subseteq \dom{tab_{out}} \land \enu{i + 1}{tab_{out}} = \enu{i + 1}{tab}}$
+    i := i + 1
+    $\annot{l_4 : 0 \leq i \land i \leq n \land 0..i - 1 \subseteq \dom{tab_{out}} \land \enu{i}{tab_{out}} = \enu{i}{tab}}$
+}
+$\annot{l_5 : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+inc := 3
+$\annot{l_6 : 0..n - 1 \subseteq \dom{tab_{out}} \land inc = 3 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+while (inc > 0) {
+    $\annot{l_7 : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    i := 0
+    $\annot{l_8 : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land i = 0 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    while (i < n) {
+        $\annot{l_9 : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{9} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+        j := i
+        $\annot{l_{10} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{10} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))) \land j = i}$
+        tmp := tab_out(i)
+        $\annot{l_{11} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{11} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))) \land j = i}$
+        $\annot{\phantom{l_{11} : }\land tmp = tab_{out}(i)}$
+        while ((j >= inc) and (tab_out(j - inc) > tmp)) {
+            $\annot{l_{12} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n}$
+            $\annot{\phantom{l_{12} : }\land inc \leq j \land j \leq i \land tab_{out}(j - inc) \geq tmp}$
+            $\annot{\phantom{l_{12} : }\land \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j)\}} - \ind{\{tmp\}}}$
+            $\annot{\phantom{l_{12} : }\land (inc = 1 \implies ((\forall k \cdot k \in 0..i - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+            $\annot{\phantom{l_{12} : \land (inc = 1 \implies (}\land (j = i \lor tab_{out}(i - 1) \leq tab_{out}(i))))}$
+            tab_out(j) := tab_out(j - inc)
+            $\annot{l_{13} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n}$
+            $\annot{\phantom{l_{13} : } \land inc \leq j \land j \leq i \land tab_{out}(j - inc) \geq tmp}$
+            $\annot{\phantom{l_{13} : }\land \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j - inc)\}} - \ind{\{tmp\}}}$
+            $\annot{\phantom{l_{13} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 1 \implies tab_{out}(k) \leq tab_{out}(k + 1))) }$
+            j := j - inc
+            $\annot{l_{14} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n}$
+            $\annot{\phantom{l_{14} : }\land 0 \leq j \land j \leq i - 1 \land tab_{out}(j) \geq tmp}$
+            $\annot{\phantom{l_{14} : }\land \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j)\}} - \ind{\{tmp\}}}$
+            $\annot{\phantom{l_{14} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 1 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+        }
+        $\annot{l_{15} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n}$
+        $\annot{\phantom{l_{15} : }\land 0 \leq j \land j < n \land tab_{out}(j) \geq tmp}$
+        $\annot{\phantom{l_{15} : }\land \enu{n}{tab_{out}} = \enu{n}{tab} + \ind{\{tab_{out}(j)\}} - \ind{\{tmp\}}}$
+        $\annot{\phantom{l_{15} : }\land (inc = 1 \implies ((\forall k \cdot k \in 0..i - 1 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+        $\annot{\phantom{l_{15} : \land (inc = 1 \implies (}\land (\forall k \cdot k \in 0..j - 1 \implies tab_{out}(k) \leq tmp)))}$
+        tab_out(j) := tmp
+        $\annot{l_{16} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i < n}$
+        $\annot{\phantom{l_{16} : }\land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{16} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 1 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+        i := i + 1
+        $\annot{l_{17} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land 0 \leq i \land i \leq n}$
+        $\annot{\phantom{l_{17} : }\land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{17} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..i - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+    }
+    $\annot{l_{18} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc > 0 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{18} : }\land (inc = 1 \implies (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+    if (inc / 2 != 0) {
+        $\annot{l_{19} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc \geq 2 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        inc := inc / 2
+        $\annot{l_{20} : 0..n - 1 \subseteq \dom{tab_{out}} \land inc \geq 1 \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    } else {
+        $\annot{l_{21} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{21} : }\land inc = 1 \land (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+        if (inc = 1) {
+            $\annot{l_{22} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{22} : }\land (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+            inc := 0
+            $\annot{l_{23} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+            $\annot{\phantom{l_{23} : }\land inc = 0 \land (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+        } else {
+            $\annot{l_{24} : \text{\rmfamily\sc{faux}}}$
+            inc := 1
+            $\annot{l_{25} : \text{\rmfamily\sc{faux}}}$
+        }
+        $\annot{l_{26} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+        $\annot{\phantom{l_{26} : }\land inc = 0 \land (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+    }
+    $\annot{l_{27} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+    $\annot{\phantom{l_{27} : }\land inc \geq 0 \land (inc = 0 \implies (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1)))}$
+}
+$\annot{l_{28} : 0..n - 1 \subseteq \dom{tab_{out}} \land \enu{n}{tab_{out}} = \enu{n}{tab}}$
+$\annot{\phantom{l_{28} : }\land (\forall k \cdot k \in 0..n - 2 \implies tab_{out}(k) \leq tab_{out}(k + 1))}$
+\end{lstlisting}
+
+\subsection{Idée de la preuve}
+
+Le  shell sort est un dérivé du tri par insertion où l'on réalise des passes préliminaires pour pré-trier certaines valeurs du tableau. Comme ici on ne s'intéresse pas à montrer que le \it{shell sort} est plus efficace que le tri par insertion, mais seulement qu'il est partiellement correct, il suffit de montrer que pour $inc = 1$ la passe trie effectivement le tableau (puisque c'est équivalent à ce moment au tri par insertion), et que la suite des valeurs prises par $inc$ se termine forcément par les valeurs $1, 0$. On vérifie également que toutes les passes conservent les éléments du tableau original.
+
+\subsection{Absence d'erreurs à l'exécution}
+
+L'utilisation de Frama-C sur l'algorithme de shell sort est délicate. En effet, pour vérifier l'absence d'erreurs à l'exécution, Frama-C va tenter de prouver l'absence d'overflow/underflow, ainsi que la validité des cases mémoires lors des déréférences de pointeurs.
+
+Cependant, pour prouver l'absence d'erreurs, compte-tenu de la complexité de l'algorithme de shell sort, Frama-C a besoin d'un système d'annotations semblable à celui décrit dans ce document, à ceci près que le code C travaille en place, et que Frama-C le remodifie ensuite dans un format que l'outil digère plus facilement. Il faudrait donc adapter le système d'annotation qui a été utilisé sur papier, Rodin et TLA+ -- un travail long et fastidieux -- pour gagner seulement la preuve d'absence de RTE\ldots{}
+
+Mais en analysant le problème de manière plus détaillée :
+\begin{itemize}
+    \item la validité des cases mémoires (les accès aux cellules de $tab$ et $tab_{out}$) a été prouvée avec Rodin, avec toutes les annotations (validées) de la forme $0..n - 1 \subseteq \dom{tab}$ ;
+    \item les annotations prouvées avec Rodin montrent que $i$, $j$ sont toujours dans l'intervalle $0..n - 1$, et $inc$ dans l'intervalle $0..3$. $tmp$ quant à lui n'est utilisé que pour sauver une valeur temporaire du tableau (qui est du type \tt{int} aussi, donc aucune chance de RTE).
+\end{itemize}
+Ainsi, il semble que l'absence de RTE soit déjà validée grâce à Rodin, à condition que $n$ ne dépasse pas la valeur maximale pour un entier signé, à savoir $2147483647$ en 32 bit ou $9223372036854775807$ en 64 bit.
+
+Le code C du programme, avec le commentaire spécial au format ACSL (Frama-C) spécifiant la pré-condition et post-condition de l'algorithme est tout de même fourni dans les livrables du projet.
+
+\clearpage\section{Remarques, résultats et pistes d'amélioration}
+
+\subsection{Genrodin}
+
+Genrodin est un script Python qui a été utilisé pour générer facilement la structure des preuves avec Rodin. Il est disponible librement à l'adresse \url{https://github.com/tbagrel1/genrodin}.
+
+\subsection{Prouveurs utilisés sur Rodin}
+
+Voici la liste des prouveurs qui ont été utilisés sur Rodin :
+\begin{itemize}
+    \item le prouveur par défaut ;
+    \item les prouveurs SMT (utilisés en tactique automatique, ce qui a permis de décharger beaucoup de preuves) ;
+    \item les prouveurs d'Atelier B (pour décharger certaines PO en sélectionnant manuellement les hypothèses) ;
+    \item le prouveur ProB (pour décharger certaines hypothèses arithmétiques complexes).
+\end{itemize}
+
+\subsection{Pas de gestion de Enum avec Rodin}
+
+Nous avons introduit dans ce document l'opérateur Enum, utilisé pour prouver la conservation des éléments dans les preuves de tri. Cependant, compte tenu de son expression complexe, et de la difficulté déjà importante pour décharger toutes les PO sur Rodin, nous avons choisi de ne pas l'ajouter aux invariants. La preuve réalisée sur Rodin prouve donc que le tableau est trié en sortie, mais pas qu'il contient les mêmes éléments que le tableau d'entrée (même si les théorèmes énoncés dans ce document semblent justes).
+
+Une solution si la définition directe sur Rodin de l'opérateur Enum est trop complexe pourrait être de prouver effectivement à la main (sur papier) les trois théorèmes sur l'opérateur, et de les ajouter au contexte comme axiomes. Une meilleure méthode encore serait d'ajouter le lemme en tant qu'axiome, pour laisser Rodin vérifier les théorèmes.
+
+\subsection{Résultats obtenus sur Rodin}
+
+\`A l'issue de ce projet, la preuve obtenue sur Rodin pour les trois programmes (triangle de Floyd, bubble sort et shell sort) ne contient plus aucune PO non déchargée. On peut donc dire que les trois programmes ont été prouvés mécaniquement (sauf la conservation des éléments pour les algorithmes de tri, comme évoqué au paragraphe précédent).
+
+\subsection{Labels "ul" sur TLA+}
+
+Lors de la définition des algorithmes en PlusCal, nous avons choisi de placer tous nos labels sous la forme \texttt{l$x$: skip}, pour se rapprocher le plus possible des programmes annotés présentés dans ce document. Cependant, la syntaxe de PlusCal requiert qu'un label soit présent devant chaque instruction \texttt{while}. Nous avons donc introduit les labels \texttt{ul$x$}, pour UselessLabel$x$, qui ne sont d'aucune utilité dans le reste du model checking\ldots{}
+
+\subsection{Définition de l'opérateur Enum sur TLA+}
+
+TLA+ permet la définition d'opérateurs personnalisés, et nous avons donc pu définir l'opérateur Enum. Cependant, tester l'égalité entre $\enu{n}{tab}$ et $\enu{n}{tab_{out}}$ requiert de vérifier que deux fonctions dont le domaine de départ est infini ($\Z$) sont égales, ce dont TLA+ ne semble pas capable directement. Nous avons donc restreint l'ensemble de définition de la fonction $\enu{n}{tab_{out}}$ aux valeurs effectivement présentes dans le tableau de départ ($tab$), ce qui est possible car $tab$ est une constante dans le code TLA+. Ce n'est pas gênant car il est facile de montrer que $\enu{n}{tab} \neq \enu{n}{tab_{out}}$ si et seulement si il en est de même pour la version TLA+.
+
+\subsection{Valeur par défaut des fonctions sur TLA+}
+
+\`A notre grand étonnement, il semble qu'en PlusCal l'opération \texttt{f(i) := v} ne peut altérer la fonction $f$ que si $i \in \dom{f}$ (contrairement au comportement de Rodin, qui étend le domaine de définition de la fonction partielle si nécessaire pour réaliser l'affectation).
+
+Pour pallier ce problème, nous avons défini à l'initialisation les fonctions avec un domaine égal à leur domaine futur, ce qui est possible car $n$, qui dans les trois programmes borne le tableau-fonction, est une constante pour TLA+.
+
+\subsection{Résultats obtenus sur TLA+}
+
+Nos trois programmes TLA+ contiennent l'intégralité des annotations présentées dans ce document, et le model checking passe sur des exemples. Les annotations, même celles avec Enum, ne sont donc pas réfutées par TLA+ et semblent correctes.
+
+\subsection{Résultats obtenus sur Frama-C}
+
+Les résultats que nous avons obtenus sur Frama-C sont plutôt maigres : en effet, il semblerait que pour prouver l'absence d'overflow/underflow et la validité des accès mémoire, il faille ajouter un système d'annotation semblable à celui développé dans ce document, ce qui requiert un temps conséquent. De plus, par la preuve Rodin de chacun de nos codes, nous avons pu prouver l'absence de RTE avec de simples arguments mathématiques. Nous avons donc pu d'une certaine manière nous passer de Frama-C (puisqu'en mode WP, il faisait doublon avec Rodin).
+
+Nous aurions toutefois aimé pouvoir nous faire la main avec le logiciel qui semble très intéressant sur des applications pratiques de la preuve de programme. Peut-être pour un prochain projet !
+
+\clearpage\section{Ressentis personnels et conclusion}
+
+\subsection{Ressentis de Timothée}
+
+Le projet nous a demandé du temps et de l'investissement mais les résultats sont à la hauteur de nos attentes ce qui est très satisfaisant. De plus le projet m'a permis de découvrir plus en détail Rodin et le système d'annotations ainsi que leur potentiel. Thomas a su nous expliquer et nous a permis d'apprendre de nos erreurs ce qui a été très enrichissant et nous a très certainement permis d'apprendre plus de chose que sans son soutien. L'ambiance au sein du groupe a également permis d'établir un cadre de travail agréable.
+\subsection{Ressentis d'Alexandre}
+
+Projet très intéressant qui nous a demandé beaucoup de réflexion sur la gestion des tableaux (une piste d'amélioration sur la preuve avec Rodin reste d'ailleurs ouverte). Groupe de travail toujours aussi agréable et un grand merci a Thomas pour l'aide qu'il m'a apporté sur ce projet. 
+
+\subsection{Ressentis de Thomas}
+
+Ce projet a été très instructif et intéressant à mener. Les programmes proposés présentaient des difficultés différentes, et chacun leur spécificité. Si les outils de preuves n'étaient pas forcément très simples à prendre en main, je suis content à la fin de ce projet d'avoir bien compris les possibilités, cas d'usages et limitations de ces derniers. Je suis également fier d'avoir réussi avec mon groupe à prouver les trois programmes, le tout dans une ambiance extrêmement agréable et conviviale.
+
+\subsection{Conclusion}
+
+Ce projet très complet nous à permis de mettre en pratique une grande partie des connaissances apprises durant les cours et TPs de MVSI. Nous avons également pu exploiter les outils Rodin et TLA à leur plein potentiel et découvrir l'outil Frama-C. Enfin, ce projet a également été l'occasion de renforcer l'efficacité de notre groupe de travail, en développant encore plus l'organisation et l'entraide.
+
+\vfill
+
+\rule{\linewidth}{1pt}
+\begin{center}\small
+    Timothée \sc{Adam} -- Alexandre \sc{Cesari} -- Thomas \sc{Bagrel}\\
+    TELECOM Nancy -- Année 2019-2020
+\end{center}
+
+\end{document}
