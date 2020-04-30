@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.machineFile org.eventb.core.configuration="org.eventb.core.fwd" version="5">
+    <org.eventb.core.event name="'" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="INITIALISATION">
+        <org.eventb.core.action name="'" org.eventb.core.assignment="pc ≔ l0" org.eventb.core.label="init_pc"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="i ≔ 0" org.eventb.core.label="act1"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="j ≔ 0" org.eventb.core.label="act2"/>
+        <org.eventb.core.action name="*" org.eventb.core.assignment="tmp ≔ 0" org.eventb.core.label="act3"/>
+        <org.eventb.core.action name="+" org.eventb.core.assignment="inc ≔ 0" org.eventb.core.label="act4"/>
+        <org.eventb.core.action name="," org.eventb.core.assignment="tab_out ≔ ∅" org.eventb.core.label="act5"/>
+    </org.eventb.core.event>
+    <org.eventb.core.seesContext name="(" org.eventb.core.target="shell_sort_context"/>
+    <org.eventb.core.variable name=")" org.eventb.core.identifier="pc"/>
+    <org.eventb.core.invariant name="*" org.eventb.core.label="type_pc" org.eventb.core.predicate="pc ∈ Lines"/>
+    <org.eventb.core.event name="H" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l1l2">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l2" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="i &lt; n"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="I" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l1l5">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l1"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l5" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(i &lt; n)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="J" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l4l2">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l4"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l2" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="i &lt; n"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="K" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l4l5">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l4"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l5" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(i &lt; n)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="L" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l6l7">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l6"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l7" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="inc &gt; 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="M" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l6l28">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l6"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l28" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(inc &gt; 0)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="N" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l27l7">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l27"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l7" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="inc &gt; 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="O" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l27l28">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l27"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l28" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(inc &gt; 0)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="P" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l8l9">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l8"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l9" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="i &lt; n"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="Q" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l8l18">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l8"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l18" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(i &lt; n)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="R" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l17l9">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l17"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l9" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="i &lt; n"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="S" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l17l18">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l17"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l18" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(i &lt; n)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="T" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l11l12">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l11"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l12" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="(j ≥ inc) ∧ (tab_out(j − inc) &gt; tmp)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="U" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l11l15">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l11"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l15" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬((j ≥ inc) ∧ (tab_out(j − inc) &gt; tmp))"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="V" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l14l12">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l14"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l12" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="(j ≥ inc) ∧ (tab_out(j − inc) &gt; tmp)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="W" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l14l15">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l14"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l15" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬((j ≥ inc) ∧ (tab_out(j − inc) &gt; tmp))"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="X" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l18l19">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l18"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l19" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="inc ÷ 2 ≠ 0"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="Y" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l20l27">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l20"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l27" org.eventb.core.label="pc_next"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="Z" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l18l21">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l18"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l21" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(inc ÷ 2 ≠ 0)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="[" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l26l27">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l26"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l27" org.eventb.core.label="pc_next"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="\" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l21l22">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l21"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l22" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="inc = 1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="]" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l23l26">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l23"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l26" org.eventb.core.label="pc_next"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="^" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l21l24">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l21"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l24" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.guard name=")" org.eventb.core.label="cond" org.eventb.core.predicate="¬(inc = 1)"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="_" org.eventb.core.comment="FLOW" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l25l26">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l25"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l26" org.eventb.core.label="pc_next"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="`" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l0l1">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l0"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l1" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="i ≔ 0" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="a" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l2l3">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l2"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l3" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="tab_out(i) ≔ tab(i)" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="b" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l3l4">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l3"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l4" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="i ≔ i + 1" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="c" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l5l6">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l5"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l6" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="inc ≔ 3" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="d" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l7l8">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l7"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l8" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="i ≔ 0" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="e" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l9l10">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l9"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l10" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="j ≔ i" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="f" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l10l11">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l10"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l11" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="tmp ≔ tab_out(i)" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="g" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l12l13">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l12"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l13" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="tab_out(j) ≔ tab_out(j − inc)" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="h" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l13l14">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l13"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l14" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="j ≔ j − inc" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="i" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l15l16">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l15"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l16" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="tab_out(j) ≔ tmp" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="j" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l16l17">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l16"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l17" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="i ≔ i + 1" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="k" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l19l20">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l19"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l20" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="inc ≔ inc ÷ 2" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="l" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l22l23">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l22"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l23" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="inc ≔ 0" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.event name="m" org.eventb.core.comment="TBD" org.eventb.core.convergence="0" org.eventb.core.extended="false" org.eventb.core.label="l24l25">
+        <org.eventb.core.guard name="'" org.eventb.core.label="pc_control" org.eventb.core.predicate="pc = l24"/>
+        <org.eventb.core.action name="(" org.eventb.core.assignment="pc ≔ l25" org.eventb.core.label="pc_next"/>
+        <org.eventb.core.action name=")" org.eventb.core.assignment="inc ≔ 1" org.eventb.core.comment="TBD" org.eventb.core.label="act1"/>
+    </org.eventb.core.event>
+    <org.eventb.core.variable name="n" org.eventb.core.identifier="tab_out"/>
+    <org.eventb.core.variable name="o" org.eventb.core.identifier="i"/>
+    <org.eventb.core.variable name="p" org.eventb.core.identifier="j"/>
+    <org.eventb.core.variable name="q" org.eventb.core.identifier="inc"/>
+    <org.eventb.core.variable name="r" org.eventb.core.identifier="tmp"/>
+    <org.eventb.core.invariant name="s" org.eventb.core.label="type_vars" org.eventb.core.predicate="tab_out ∈ ℕ ⇸ ℤ&#10;∧ i ∈ ℤ&#10;∧ j ∈ ℤ&#10;∧ inc ∈ ℤ&#10;∧ tmp ∈ ℤ"/>
+    <org.eventb.core.invariant name="+" org.eventb.core.comment="TBD" org.eventb.core.label="Pl0" org.eventb.core.predicate="pc = l0 ⇒ (⊤)"/>
+    <org.eventb.core.invariant name="," org.eventb.core.comment="TBD" org.eventb.core.label="Pl1" org.eventb.core.predicate="pc = l1 ⇒ (i = 0)"/>
+    <org.eventb.core.invariant name="-" org.eventb.core.comment="TBD" org.eventb.core.label="Pl2" org.eventb.core.predicate="pc = l2 ⇒ (0 ≤ i ∧ i &lt; n ∧ 0‥i−1 ⊆ dom(tab_out))"/>
+    <org.eventb.core.invariant name="." org.eventb.core.comment="TBD" org.eventb.core.label="Pl3" org.eventb.core.predicate="pc = l3 ⇒ (0 ≤ i ∧ i &lt; n ∧ 0‥i ⊆ dom(tab_out))"/>
+    <org.eventb.core.invariant name="/" org.eventb.core.comment="TBD" org.eventb.core.label="Pl4" org.eventb.core.predicate="pc = l4 ⇒ (0 ≤ i ∧ i ≤ n ∧ 0‥i−1 ⊆ dom(tab_out))"/>
+    <org.eventb.core.invariant name="0" org.eventb.core.comment="TBD" org.eventb.core.label="Pl5" org.eventb.core.predicate="pc = l5 ⇒ (0‥n−1 ⊆ dom(tab_out))"/>
+    <org.eventb.core.invariant name="1" org.eventb.core.comment="TBD" org.eventb.core.label="Pl6" org.eventb.core.predicate="pc = l6 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc = 3)"/>
+    <org.eventb.core.invariant name="2" org.eventb.core.comment="TBD" org.eventb.core.label="Pl7" org.eventb.core.predicate="pc = l7 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0)"/>
+    <org.eventb.core.invariant name="3" org.eventb.core.comment="TBD" org.eventb.core.label="Pl8" org.eventb.core.predicate="pc = l8 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ i = 0)"/>
+    <org.eventb.core.invariant name="4" org.eventb.core.comment="TBD" org.eventb.core.label="Pl9" org.eventb.core.predicate="pc = l9 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−2 ⇒ tab_out(k) ≤ tab_out(k + 1))))"/>
+    <org.eventb.core.invariant name="5" org.eventb.core.comment="TBD" org.eventb.core.label="Pl10" org.eventb.core.predicate="pc = l10 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−2 ⇒ tab_out(k) ≤ tab_out(k + 1))) ∧ j = i)"/>
+    <org.eventb.core.invariant name="6" org.eventb.core.comment="TBD" org.eventb.core.label="Pl11" org.eventb.core.predicate="pc = l11 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−2 ⇒ tab_out(k) ≤ tab_out(k + 1))) ∧ j = i ∧ tmp = tab_out(i))"/>
+    <org.eventb.core.invariant name="7" org.eventb.core.comment="TBD" org.eventb.core.label="Pl12" org.eventb.core.predicate="pc = l12 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ inc ≤ j ∧ j ≤ i ∧ (inc = 1 ⇒ ((∀k·k ∈ 0‥i−2 ⇒ tab_out(k) ≤ tab_out(k + 1))) ∧ (j = i ∨ tab_out(i − 1) ≤ tab_out(i)))&#10;∧ tab_out(j − inc) ≥ tmp)"/>
+    <org.eventb.core.invariant name="8" org.eventb.core.comment="TBD" org.eventb.core.label="Pl13" org.eventb.core.predicate="pc = l13 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ inc ≤ j ∧ j ≤ i ∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−1 ⇒ tab_out(k) ≤ tab_out(k + 1)))&#10;∧ tab_out(j − inc) ≥ tmp)"/>
+    <org.eventb.core.invariant name="9" org.eventb.core.comment="TBD" org.eventb.core.label="Pl14" org.eventb.core.predicate="pc = l14 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ 0 ≤ j ∧ j ≤ i − 1 ∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−1 ⇒ tab_out(k) ≤ tab_out(k + 1)))&#10;∧ tab_out(j) ≥ tmp)"/>
+    <org.eventb.core.invariant name=":" org.eventb.core.comment="TBD" org.eventb.core.label="Pl15" org.eventb.core.predicate="pc = l15 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ 0 ≤ j ∧ j ≤ i ∧ tab_out(j) ≥ tmp&#10;∧ (inc = 1 ⇒ ((∀k·k ∈ 0‥i−1 ⇒ tab_out(k) ≤ tab_out(k + 1)) ∧ (∀k·k∈0‥j−1 ⇒ tab_out(k) ≤ tmp))))"/>
+    <org.eventb.core.invariant name=";" org.eventb.core.comment="TBD" org.eventb.core.label="Pl16" org.eventb.core.predicate="pc = l16 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i &lt; n&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−1 ⇒ tab_out(k) ≤ tab_out(k + 1))))"/>
+    <org.eventb.core.invariant name="&lt;" org.eventb.core.comment="TBD" org.eventb.core.label="Pl17" org.eventb.core.predicate="pc = l17 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0 ∧ 0 ≤ i ∧ i ≤ n&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥i−2 ⇒ tab_out(k) ≤ tab_out(k + 1))))"/>
+    <org.eventb.core.invariant name="=" org.eventb.core.comment="TBD" org.eventb.core.label="Pl18" org.eventb.core.predicate="pc = l18 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc &gt; 0&#10;∧ (inc = 1 ⇒ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1))))"/>
+    <org.eventb.core.invariant name="&gt;" org.eventb.core.comment="TBD" org.eventb.core.label="Pl19" org.eventb.core.predicate="pc = l19 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc ≥ 2)"/>
+    <org.eventb.core.invariant name="?" org.eventb.core.comment="TBD" org.eventb.core.label="Pl20" org.eventb.core.predicate="pc = l20 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc ≥ 1)"/>
+    <org.eventb.core.invariant name="@" org.eventb.core.comment="TBD" org.eventb.core.label="Pl21" org.eventb.core.predicate="pc = l21 ⇒ (0‥n−1 ⊆ dom(tab_out)&#10;∧ inc = 1 ∧ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1)))"/>
+    <org.eventb.core.invariant name="A" org.eventb.core.comment="TBD" org.eventb.core.label="Pl22" org.eventb.core.predicate="pc = l22 ⇒ (0‥n−1 ⊆ dom(tab_out)&#10;∧ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1)))"/>
+    <org.eventb.core.invariant name="B" org.eventb.core.comment="TBD" org.eventb.core.label="Pl23" org.eventb.core.predicate="pc = l23 ⇒ (0‥n−1 ⊆ dom(tab_out)&#10;∧ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1)) ∧ inc = 0)"/>
+    <org.eventb.core.invariant name="C" org.eventb.core.comment="TBD" org.eventb.core.label="Pl24" org.eventb.core.predicate="pc = l24 ⇒ (⊥) "/>
+    <org.eventb.core.invariant name="D" org.eventb.core.comment="TBD" org.eventb.core.label="Pl25" org.eventb.core.predicate="pc = l25 ⇒ (⊥)"/>
+    <org.eventb.core.invariant name="E" org.eventb.core.comment="TBD" org.eventb.core.label="Pl26" org.eventb.core.predicate="pc = l26 ⇒ (0‥n−1 ⊆ dom(tab_out)&#10;∧ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1)) ∧ inc = 0)"/>
+    <org.eventb.core.invariant name="F" org.eventb.core.comment="TBD" org.eventb.core.label="Pl27" org.eventb.core.predicate="pc = l27 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ inc ≥ 0&#10;∧ (inc = 0 ⇒ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1))))"/>
+    <org.eventb.core.invariant name="G" org.eventb.core.comment="TBD" org.eventb.core.label="Pl28" org.eventb.core.predicate="pc = l28 ⇒ (0‥n−1 ⊆ dom(tab_out) ∧ (∀k·k ∈ 0‥n−2 ⇒ tab_out(k) ≤ tab_out(k + 1)))"/>
+</org.eventb.core.machineFile>

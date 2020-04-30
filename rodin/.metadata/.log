@@ -1,0 +1,36 @@
+!SESSION 2020-04-30 21:38:52.205 -----------------------------------------------
+eclipse.buildId=unknown
+java.version=13.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=fr_FR
+Command-line arguments:  -data /home/thomas/Drive/Thomas/cours/cours_2019_2020/mvsi/mvsi/rodin -os linux -ws gtk -arch x86_64
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.714
+!MESSAGE Plugin org.eventb.ide, extension org.eclipse.ui.perspectiveExtensions, id org.eventb.ui.views.ProofInformation: Attribute 'relative' not defined.  This attribute is required when relationship="stack".
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.716
+!MESSAGE Unable to process element: view in perspective extension: null
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Plugin org.eventb.ide, extension org.eclipse.ui.perspectiveExtensions, id org.eventb.ui.views.SearchHypothesis: Attribute 'relative' not defined.  This attribute is required when relationship="stack".
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Unable to process element: view in perspective extension: null
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Plugin org.eventb.ide, extension org.eclipse.ui.perspectiveExtensions, id org.eventb.ui.views.CacheHypothesis: Attribute 'relative' not defined.  This attribute is required when relationship="stack".
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Unable to process element: view in perspective extension: null
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Plugin org.eventb.ide, extension org.eclipse.ui.perspectiveExtensions, id org.eventb.ui.views.ProofSkeleton: Attribute 'relative' not defined.  This attribute is required when relationship="stack".
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.717
+!MESSAGE Unable to process element: view in perspective extension: null
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.718
+!MESSAGE Plugin org.eventb.ide, extension org.eclipse.ui.perspectiveExtensions, id org.eventb.ui.views.RuleDetails: Attribute 'relative' not defined.  This attribute is required when relationship="stack".
+
+!ENTRY org.eclipse.ui 4 4 2020-04-30 21:41:18.718
+!MESSAGE Unable to process element: view in perspective extension: null

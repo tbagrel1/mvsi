@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.poFile org.eventb.core.poStamp="0">
+    <org.eventb.core.poPredicateSet name="ABSHYP" org.eventb.core.poStamp="0">
+        <org.eventb.core.poIdentifier name="Lines" org.eventb.core.type="ℙ(Lines)"/>
+        <org.eventb.core.poIdentifier name="l0" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l1" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l10" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l11" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l12" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l13" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l14" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l15" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l16" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l17" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l18" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l19" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l2" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l20" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l21" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l22" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l23" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l24" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l25" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l26" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l27" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l28" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l3" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l4" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l5" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l6" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l7" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l8" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="l9" org.eventb.core.type="Lines"/>
+        <org.eventb.core.poIdentifier name="n" org.eventb.core.type="ℤ"/>
+        <org.eventb.core.poIdentifier name="tab" org.eventb.core.type="ℙ(ℤ×ℤ)"/>
+    </org.eventb.core.poPredicateSet>
+    <org.eventb.core.poPredicateSet name="ALLHYP" org.eventb.core.parentSet="/shell_sort/shell_sort_context.bpo|org.eventb.core.poFile#shell_sort_context|org.eventb.core.poPredicateSet#ABSHYP" org.eventb.core.poStamp="0">
+        <org.eventb.core.poPredicate name="PRD0" org.eventb.core.predicate="partition(Lines,{l0},{l1},{l2},{l3},{l4},{l5},{l6},{l7},{l8},{l9},{l10},{l11},{l12},{l13},{l14},{l15},{l16},{l17},{l18},{l19},{l20},{l21},{l22},{l23},{l24},{l25},{l26},{l27},{l28})" org.eventb.core.source="/shell_sort/shell_sort_context.buc|org.eventb.core.contextFile#shell_sort_context|org.eventb.core.axiom#E"/>
+        <org.eventb.core.poPredicate name="PRD1" org.eventb.core.predicate="tab∈ℕ ⇸ ℤ" org.eventb.core.source="/shell_sort/shell_sort_context.buc|org.eventb.core.contextFile#shell_sort_context|org.eventb.core.axiom#H"/>
+        <org.eventb.core.poPredicate name="PRD2" org.eventb.core.predicate="n∈ℕ" org.eventb.core.source="/shell_sort/shell_sort_context.buc|org.eventb.core.contextFile#shell_sort_context|org.eventb.core.axiom#I"/>
+        <org.eventb.core.poPredicate name="PRD3" org.eventb.core.predicate="0 ‥ n − 1⊆dom(tab)" org.eventb.core.source="/shell_sort/shell_sort_context.buc|org.eventb.core.contextFile#shell_sort_context|org.eventb.core.axiom#J"/>
+        <org.eventb.core.poPredicate name="PRD4" org.eventb.core.predicate="∀A⦂ℙ(ℤ)·A⊆ℕ∧0∈A∧succ[A]⊆A⇒ℕ⊆A" org.eventb.core.source="/shell_sort/shell_sort_context.buc|org.eventb.core.contextFile#shell_sort_context|org.eventb.core.axiom#K"/>
+    </org.eventb.core.poPredicateSet>
+</org.eventb.core.poFile>

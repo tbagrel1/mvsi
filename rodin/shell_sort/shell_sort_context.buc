@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<org.eventb.core.contextFile org.eventb.core.configuration="org.eventb.core.fwd;de.prob.symbolic.ctxBase" version="3">
+    <org.eventb.core.carrierSet name="'" org.eventb.core.identifier="Lines"/>
+    <org.eventb.core.constant name="(" org.eventb.core.identifier="l0"/>
+    <org.eventb.core.constant name=")" org.eventb.core.identifier="l1"/>
+    <org.eventb.core.constant name="*" org.eventb.core.identifier="l2"/>
+    <org.eventb.core.constant name="+" org.eventb.core.identifier="l3"/>
+    <org.eventb.core.constant name="," org.eventb.core.identifier="l4"/>
+    <org.eventb.core.constant name="-" org.eventb.core.identifier="l5"/>
+    <org.eventb.core.constant name="." org.eventb.core.identifier="l6"/>
+    <org.eventb.core.constant name="/" org.eventb.core.identifier="l7"/>
+    <org.eventb.core.constant name="0" org.eventb.core.identifier="l8"/>
+    <org.eventb.core.constant name="1" org.eventb.core.identifier="l9"/>
+    <org.eventb.core.constant name="2" org.eventb.core.identifier="l10"/>
+    <org.eventb.core.constant name="3" org.eventb.core.identifier="l11"/>
+    <org.eventb.core.constant name="4" org.eventb.core.identifier="l12"/>
+    <org.eventb.core.constant name="5" org.eventb.core.identifier="l13"/>
+    <org.eventb.core.constant name="6" org.eventb.core.identifier="l14"/>
+    <org.eventb.core.constant name="7" org.eventb.core.identifier="l15"/>
+    <org.eventb.core.constant name="8" org.eventb.core.identifier="l16"/>
+    <org.eventb.core.constant name="9" org.eventb.core.identifier="l17"/>
+    <org.eventb.core.constant name=":" org.eventb.core.identifier="l18"/>
+    <org.eventb.core.constant name=";" org.eventb.core.identifier="l19"/>
+    <org.eventb.core.constant name="&lt;" org.eventb.core.identifier="l20"/>
+    <org.eventb.core.constant name="=" org.eventb.core.identifier="l21"/>
+    <org.eventb.core.constant name="&gt;" org.eventb.core.identifier="l22"/>
+    <org.eventb.core.constant name="?" org.eventb.core.identifier="l23"/>
+    <org.eventb.core.constant name="@" org.eventb.core.identifier="l24"/>
+    <org.eventb.core.constant name="A" org.eventb.core.identifier="l25"/>
+    <org.eventb.core.constant name="B" org.eventb.core.identifier="l26"/>
+    <org.eventb.core.constant name="C" org.eventb.core.identifier="l27"/>
+    <org.eventb.core.constant name="D" org.eventb.core.identifier="l28"/>
+    <org.eventb.core.axiom name="E" org.eventb.core.label="content_Lines" org.eventb.core.predicate="partition(Lines, {l0}, {l1}, {l2}, {l3}, {l4}, {l5}, {l6}, {l7}, {l8}, {l9}, {l10}, {l11}, {l12}, {l13}, {l14}, {l15}, {l16}, {l17}, {l18}, {l19}, {l20}, {l21}, {l22}, {l23}, {l24}, {l25}, {l26}, {l27}, {l28})"/>
+    <org.eventb.core.constant name="F" org.eventb.core.identifier="tab"/>
+    <org.eventb.core.constant name="G" org.eventb.core.identifier="n"/>
+    <org.eventb.core.axiom name="H" org.eventb.core.label="type_tab" org.eventb.core.predicate="tab ∈ ℕ ⇸ ℤ"/>
+    <org.eventb.core.axiom name="I" org.eventb.core.label="type_n" org.eventb.core.predicate="n ∈ ℕ"/>
+    <org.eventb.core.axiom name="J" org.eventb.core.label="pre" org.eventb.core.predicate="0‥n−1 ⊆ dom(tab)"/>
+    <org.eventb.core.axiom name="K" org.eventb.core.label="rec" org.eventb.core.predicate="∀A·A ⊆ ℕ ∧ 0 ∈ A ∧ succ[A] ⊆ A ⇒ ℕ ⊆ A"/>
+</org.eventb.core.contextFile>
